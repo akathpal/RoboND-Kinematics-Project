@@ -95,7 +95,7 @@ def test_code(test_case):
     T6_G = Tf_mat(alpha6,a6,d7,q7).subs(s)
     
     T0_G = T0_1*T1_2*T2_3*T3_4*T4_5*T5_6*T6_G
-    
+    print("T0_G"+str(T0_G))
     # Gripper position
     px = req.poses[x].position.x
     py = req.poses[x].position.y
@@ -145,8 +145,9 @@ def test_code(test_case):
     #print("\nTheta3="+str(theta3))
     #print(theta1,theta2,theta3)
     R0_3 = T0_1[0:3,0:3] * T1_2[0:3,0:3] * T2_3[0:3,0:3]
+    print("R0_3"+str(R0_3))
     R0_3 = R0_3.evalf(subs={q1: theta1,q2: theta2, q3: theta3})
-    #print("R0_3"+str(R0_3))
+    
     R3_6 = R0_3.inv("LU")*Rot_G
     #print(R3_6)
     #deriving euler angles from composition of rotation matrix

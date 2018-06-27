@@ -9,6 +9,8 @@
 
 # Author: Harsh Pandya
 
+# Author: Abhishek Kathpal
+
 # import modules
 import rospy
 import tf
@@ -17,6 +19,7 @@ from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 from geometry_msgs.msg import Pose
 from mpmath import *
 from sympy import *
+from matplotlib import pyplot as plt
 import numpy as np
 
 R0_3 = None
@@ -53,7 +56,27 @@ def kinematics():
 	#T5_6 = Tf_mat(alpha5,a5,d6,q6).subs(s)
 	#T6_G = Tf_mat(alpha6,a6,d7,q7).subs(s)
 	R0_3 = T0_1[0:3,0:3] * T1_2[0:3,0:3] * T2_3[0:3,0:3]
+	
 	return R0_3
+
+def fk(theta):
+
+	# Create individual transformation matrices
+	#T0_1 = Tf_mat(alpha0,a0,d1,q1).subs(s)
+	#T1_2 = Tf_mat(alpha1,a1,d2,q2).subs(s)
+	#T2_3 = Tf_mat(alpha2,a2,d3,q3).subs(s)
+	#T3_4 = Tf_mat(alpha3,a3,d4,q4).subs(s)
+	#T4_5 = Tf_mat(alpha4,a4,d5,q5).subs(s)
+	#T5_6 = Tf_mat(alpha5,a5,d6,q6).subs(s)
+	#T6_G = Tf_mat(alpha6,a6,d7,q7).subs(s)
+	
+	#T0_G = T0_1*T1_2*T2_3*T3_4*T4_5*T5_6*T6_G
+
+	T0_G = Matrix([[(((sin(q2)*cos(q1)*cos(q3) + sin(q3)*cos(q1)*cos(q2))*cos(q4) + sin(q1)*sin(q4))*cos(q5) + (-sin(q2)*sin(q3)*cos(q1) + cos(q1)*cos(q2)*cos(q3))*sin(q5))*cos(q6) - ((sin(q2)*cos(q1)*cos(q3) + sin(q3)*cos(q1)*cos(q2))*sin(q4) - sin(q1)*cos(q4))*sin(q6), -(((sin(q2)*cos(q1)*cos(q3) + sin(q3)*cos(q1)*cos(q2))*cos(q4) + sin(q1)*sin(q4))*cos(q5) + (-sin(q2)*sin(q3)*cos(q1) + cos(q1)*cos(q2)*cos(q3))*sin(q5))*sin(q6) - ((sin(q2)*cos(q1)*cos(q3) + sin(q3)*cos(q1)*cos(q2))*sin(q4) - sin(q1)*cos(q4))*cos(q6), -((sin(q2)*cos(q1)*cos(q3) + sin(q3)*cos(q1)*cos(q2))*cos(q4) + sin(q1)*sin(q4))*sin(q5) + (-sin(q2)*sin(q3)*cos(q1) + cos(q1)*cos(q2)*cos(q3))*cos(q5), -0.303*((sin(q2)*cos(q1)*cos(q3) + sin(q3)*cos(q1)*cos(q2))*cos(q4) + sin(q1)*sin(q4))*sin(q5) + 0.303*(-sin(q2)*sin(q3)*cos(q1) + cos(q1)*cos(q2)*cos(q3))*cos(q5) - 1.5*sin(q2)*sin(q3)*cos(q1) - 0.054*sin(q2)*cos(q1)*cos(q3) + 1.25*sin(q2)*cos(q1) - 0.054*sin(q3)*cos(q1)*cos(q2) + 1.5*cos(q1)*cos(q2)*cos(q3) + 0.35*cos(q1)], [(((sin(q1)*sin(q2)*cos(q3) + sin(q1)*sin(q3)*cos(q2))*cos(q4) - sin(q4)*cos(q1))*cos(q5) + (-sin(q1)*sin(q2)*sin(q3) + sin(q1)*cos(q2)*cos(q3))*sin(q5))*cos(q6) - ((sin(q1)*sin(q2)*cos(q3) + sin(q1)*sin(q3)*cos(q2))*sin(q4) + cos(q1)*cos(q4))*sin(q6), -(((sin(q1)*sin(q2)*cos(q3) + sin(q1)*sin(q3)*cos(q2))*cos(q4) - sin(q4)*cos(q1))*cos(q5) + (-sin(q1)*sin(q2)*sin(q3) + sin(q1)*cos(q2)*cos(q3))*sin(q5))*sin(q6) - ((sin(q1)*sin(q2)*cos(q3) + sin(q1)*sin(q3)*cos(q2))*sin(q4) + cos(q1)*cos(q4))*cos(q6), -((sin(q1)*sin(q2)*cos(q3) + sin(q1)*sin(q3)*cos(q2))*cos(q4) - sin(q4)*cos(q1))*sin(q5) + (-sin(q1)*sin(q2)*sin(q3) + sin(q1)*cos(q2)*cos(q3))*cos(q5), -0.303*((sin(q1)*sin(q2)*cos(q3) + sin(q1)*sin(q3)*cos(q2))*cos(q4) - sin(q4)*cos(q1))*sin(q5) + 0.303*(-sin(q1)*sin(q2)*sin(q3) + sin(q1)*cos(q2)*cos(q3))*cos(q5) - 1.5*sin(q1)*sin(q2)*sin(q3) - 0.054*sin(q1)*sin(q2)*cos(q3) + 1.25*sin(q1)*sin(q2) - 0.054*sin(q1)*sin(q3)*cos(q2) + 1.5*sin(q1)*cos(q2)*cos(q3) + 0.35*sin(q1)], [-(-sin(q2)*sin(q3) + cos(q2)*cos(q3))*sin(q4)*sin(q6) + ((-sin(q2)*sin(q3) + cos(q2)*cos(q3))*cos(q4)*cos(q5) + (-sin(q2)*cos(q3) - sin(q3)*cos(q2))*sin(q5))*cos(q6), -(-sin(q2)*sin(q3) + cos(q2)*cos(q3))*sin(q4)*cos(q6) - ((-sin(q2)*sin(q3) + cos(q2)*cos(q3))*cos(q4)*cos(q5) + (-sin(q2)*cos(q3) - sin(q3)*cos(q2))*sin(q5))*sin(q6), -(-sin(q2)*sin(q3) + cos(q2)*cos(q3))*sin(q5)*cos(q4) + (-sin(q2)*cos(q3) - sin(q3)*cos(q2))*cos(q5), -0.303*(-sin(q2)*sin(q3) + cos(q2)*cos(q3))*sin(q5)*cos(q4) + 0.303*(-sin(q2)*cos(q3) - sin(q3)*cos(q2))*cos(q5) + 0.054*sin(q2)*sin(q3) - 1.5*sin(q2)*cos(q3) - 1.5*sin(q3)*cos(q2) - 0.054*cos(q2)*cos(q3) + 1.25*cos(q2) + 0.75], [0, 0, 0, 1]])
+
+	FK = T0_G.evalf(subs={q1: theta[0],q2: theta[1],q3: theta[2],q4: theta[3],q5: theta[4],q6: theta[5]})
+	your_ee = [FK[0,3],FK[1,3],FK[2,3]]
+	return your_ee
 
 def inv_kinematics(pW,R0_3,Rot_G):
 	
@@ -135,6 +158,15 @@ def handle_calculate_IK(req):
 			pW = pG - (0.303)*Rot_G[:,2]
 
 			theta = inv_kinematics(pW,R0_3,Rot_G)
+			your_ee = fk(theta)
+			ee_x_e = abs(your_ee[0]-px)
+			ee_y_e = abs(your_ee[1]-py)
+			ee_z_e = abs(your_ee[2]-pz)
+			ee_offset = sqrt(ee_x_e**2 + ee_y_e**2 + ee_z_e**2)
+			print ("\nEnd effector error for x position is: %04.8f" % ee_x_e)
+			print ("End effector error for y position is: %04.8f" % ee_y_e)
+			print ("End effector error for z position is: %04.8f" % ee_z_e)
+			print ("Overall end effector offset is: %04.8f units \n" % ee_offset)
 
 			# Populate response for the IK request
 			# In the next line replace theta1,theta2...,theta6 by your joint angle variables
@@ -150,8 +182,8 @@ def IK_server():
 	# initialize node and declare calculate_ik service
 	rospy.init_node('IK_server')
 	
-	R0_3 = kinematics() 
-
+	#R0_3 = kinematics() 
+	R0_3 = Matrix([[sin(q2)*cos(q1)*cos(q3) + sin(q3)*cos(q1)*cos(q2), -sin(q2)*sin(q3)*cos(q1) + cos(q1)*cos(q2)*cos(q3), -sin(q1)], [sin(q1)*sin(q2)*cos(q3) + sin(q1)*sin(q3)*cos(q2), -sin(q1)*sin(q2)*sin(q3) + sin(q1)*cos(q2)*cos(q3), cos(q1)], [-sin(q2)*sin(q3) + cos(q2)*cos(q3), -sin(q2)*cos(q3) - sin(q3)*cos(q2), 0]])
 	s = rospy.Service('calculate_ik', CalculateIK, handle_calculate_IK)
 	print "Ready to receive an IK request"
 	rospy.spin()
