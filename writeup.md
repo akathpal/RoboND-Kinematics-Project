@@ -103,12 +103,15 @@ From R3_6, we can extract the Euler angles from the equations shown in image bel
 ### Project Implementation
 
 Initial steps:
-Give permission to all the files in scripts folder by using chmod u+x or 755 ...filename.
+Give permission to all the files in scripts folder by using chmod u+x or 755 ...filename.Follow the 2 steps to run the code:
+1.Run safe_spawner.sh 
+2.Run python Ik_server.py to run the inverse kinematics solver file.
+3.Press Next in Rviz
 
 I have attached the image in the above section which explains how i get the inverse kinematics equations. 
 I have also verified the end-effector poses i received as input by comparing them with the poses that i got from forward kinematics using computed thetas. This is done in Ik_debug.py file.
 
-I also plotted the error graph in my Ik_server implementation. The code is well commented. All the steps are explained there. I followed the readme.md file instructions to run the code. 
+I also plotted the error graph in my Ik_server implementation. The code is well commented. All the steps are explained there. 
 
 I made video of the whole pickup and place project. FileName - PickPlace_Simulation
 
