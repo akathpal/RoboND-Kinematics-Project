@@ -7,7 +7,8 @@
 [image3]: ./misc_images/0.jpeg
 [image4]: ./misc_images/1.jpeg
 [image5]: ./misc_images/2.jpeg
-[image6]: ./misc_images/misc2.png
+[image6]: ./misc_images/misc3.png
+[image7]: ./misc_images/3.jpeg
 # Writeup 
 
 ![alt text][image2]
@@ -53,8 +54,50 @@ I have used these equations in the forward-inverse kinematics notebook file whic
 Derivation of inverse Kinematics equations is shown below: 
 
 ![alt text][image4]
+
+
+
+Using the wrist center the theta can be compued with atan2 function.
 ![alt text][image5]
+
+```python
+def inv_kinematics(pW,R0_3,Rot_G):
+	
+	theta1 = atan2(pW[1],pW[0]) 
+
+	#Solving theta2 and theta3 angles from the projected triangle using cosine rule
+	lenA = 1.501
+	lenB = sqrt(pow((sqrt(pW[0]*pW[0]+pW[1]*pW[1])-0.35),2) + pow((pW[2]-0.75),2))
+	lenC = 1.25
+
+	A = acos((lenB*lenB + lenC*lenC - lenA*lenA)/(2*lenB*lenC))
+	B = acos((lenA*lenA + lenC*lenC - lenB*lenB)/(2*lenA*lenC))
+	C = acos((lenA*lenA + lenB*lenB - lenC*lenC)/(2*lenB*lenA))
+
+	theta2 = pi/2 - A -atan2(pW[2]-0.75,sqrt(pW[0]*pW[0]+pW[1]*pW[1])-0.35)   
+	theta3 = pi/2 - (B+0.036)
+
+
+	R0_3 = R0_3.evalf(subs={q1: theta1,q2: theta2, q3: theta3})
+	#LU Decomposition is used for finding the inverse of R0_3
+	R3_6 = R0_3.inv("LU")*Rot_G
+	#print(R3_6)
+	#deriving euler angles from composition of rotation matrix
+	theta4 = atan2(R3_6[2,2], -R3_6[0,2])
+
+	theta5 = atan2(sqrt(R3_6[0,2]*R3_6[0,2] + R3_6[2,2]*R3_6[2,2]),R3_6[1,2])
+
+	theta6 = atan2(-R3_6[1,1], R3_6[1,0])
+	theta = [theta1, theta2, theta3, theta4, theta5, theta6]
+	return theta
+```
+Theta 2 and Theta3 can be computed using cosine rule for a triangle shown in figure below. Once we have first three angles, R0_3 can be computed and later using R0_3, we can find the vale of R3_6.
 ![alt text][image6]
+
+From R3_6, we can extract the Euler angles from the equations shown in image below:
+![alt text][image7]
+
+
 
 ### Project Implementation
 
@@ -69,6 +112,7 @@ I also plotted the error graph in my Ik_server implementation. The code is well 
 I made video of the whole pickup and place project. FileName - PickPlace_Simulation
 
 I also attached the plotted error in the image below:
-
+[image8]: ./misc_images/misc3.png
+I have commented the plotting equation in Ik_server file but it will still print the error for all the poses in terminal.
 
 
