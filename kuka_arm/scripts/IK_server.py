@@ -162,7 +162,7 @@ def handle_calculate_IK(req):
 			#Inverse Kinematics Output Joint Angles
 			theta = inv_kinematics(pW,R0_3,Rot_G)
 
-			# Error Computing between calculated pose from forward kinematics and input end-effctor poses
+			# #Error Computing between calculated pose from forward kinematics and input end-effctor poses
 			# your_ee = fwd_kinematics(theta)
 			# ee_x_e = abs(your_ee[0]-px)
 			# ee_y_e = abs(your_ee[1]-py)
@@ -185,8 +185,7 @@ def handle_calculate_IK(req):
 			joint_trajectory_list.append(joint_trajectory_point)
 
 		rospy.loginfo("length of Joint Trajectory List: %s" % len(joint_trajectory_list))
-		#plt.show()
-		#plt.pause(1)
+		
 		# plt.close()
 		
 		return CalculateIKResponse(joint_trajectory_list)

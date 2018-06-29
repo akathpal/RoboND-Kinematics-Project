@@ -9,6 +9,7 @@
 [image5]: ./misc_images/2.jpeg
 [image6]: ./misc_images/misc3.png
 [image7]: ./misc_images/3.jpeg
+[image8]: ./misc_images/4.png
 # Writeup 
 
 ![alt text][image2]
@@ -112,7 +113,11 @@ I also plotted the error graph in my Ik_server implementation. The code is well 
 I made video of the whole pickup and place project. FileName - PickPlace_Simulation
 
 I also attached the plotted error in the image below:
-[image8]: ./misc_images/misc3.png
-I have commented the plotting equation in Ik_server file but it will still print the error for all the poses in terminal.
+![alt text][image8]
+
+I have commented the plotting code (line 165-181 and 189) in Ik_server file because sometimes i am getting segmentation fault because of plotting the error.
+
+But without plotting error,  my implementation is able to complete 8/10 cycles.
+
 
 
