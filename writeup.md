@@ -3,7 +3,7 @@
 
 [//]: # (Image References)
 [image1]: ./misc_images/misc1.png
-[image2]: ./misc_images/misc3.png
+[image2]: ./misc_images/misc2.png
 [image3]: ./misc_images/0.jpeg
 [image4]: ./misc_images/1.jpeg
 [image5]: ./misc_images/2.jpeg
