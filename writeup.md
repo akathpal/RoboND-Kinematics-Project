@@ -10,6 +10,7 @@
 [image6]: ./misc_images/misc3.png
 [image7]: ./misc_images/3.jpeg
 [image8]: ./misc_images/4.png
+[image9]: ./misc_images/4.jpeg
 # Writeup 
 
 ![alt text][image2]
@@ -40,13 +41,12 @@ Links | alpha(i-1) | a(i-1) | d(i-1) | theta(i)
 After deriving the modified DH parameters, I computed the individual transformation matrices from one link to another. Then, by multiplying the individual transformation matrices I got the final transformation matrix between base_link and end_effector link. 
 
 
-T0_1 = [[             cos(q1),            -sin(q1),            0,              a0],
-            [ sin(q1)*cos(alpha0), cos(q1)*cos(alpha0), -sin(alpha0), -sin(alpha0)*d1],
-            [ sin(q1)*sin(alpha0), cos(q1)*sin(alpha0),  cos(alpha0),  cos(alpha0)*d1],
-                  [                   0,                   0,            0,               1]],
- All the other transformation matrices can be written in similar way.
- The final homogeneous teanformation matrix can be computed by:
- T0_G = T0_1 x T1_2 x T2_3 x T3_4 x T4_5 x T5_6 x T6_G
+All the other transformation matrices can be shown in figure below:
+ 
+![alt text][image9]
+
+The final homogeneous teanformation matrix can be computed by:
+T0_G = T0_1 x T1_2 x T2_3 x T3_4 x T4_5 x T5_6 x T6_G
     
 I have used these equations in the forward-inverse kinematics notebook file which is inside the Kinematics-Notebook folder. This notebook was my test for solving the ik problem without using ros. 
 
